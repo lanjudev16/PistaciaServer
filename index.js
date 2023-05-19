@@ -93,8 +93,11 @@ async function run() {
       res.send(result)
     })
 
+    // get all data from server
 
-
+    app.get('/allToyData',async(req,res)=>{
+      const result=await toyCollection.find().toArray()
+    })
 
 
 
