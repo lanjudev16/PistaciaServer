@@ -39,7 +39,7 @@ async function run() {
 
     // read all toy api
     app.get('/allToys',async(req,res)=>{
-      const allToys=await toyCollection.find().skip(0).limit(20).toArray()
+      const allToys=await toyCollection.find().sort({Price:-1}).skip(0).limit(20).toArray()
       res.send(allToys)
     })
 
