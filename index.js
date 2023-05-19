@@ -71,6 +71,7 @@ async function run() {
       res.send(result)
     })
     
+    // update by id api
 
     app.put('/updateData/:id',async(req,res)=>{
       const data=req.body
