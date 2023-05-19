@@ -8,7 +8,7 @@ app.use(express.json());
 require('dotenv').config()
 //mongodb connection starting code here
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri =
   `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.yekoygf.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -30,13 +30,68 @@ async function run() {
     const toyCollection = database.collection('toys');
 
 
+    // add a toy api
     app.post('/addToy',async(req,res)=>{
         const singleToyInfo=req.body
         const result=await toyCollection.insertOne(singleToyInfo)
         res.send(result)
-        console.log(singleToyInfo)
     })
 
+    // read all toy api
+    app.get('/allToys',async(req,res)=>{
+      const allToys=await toyCollection.find().skip(0).limit(20).toArray()
+      res.send(allToys)
+    })
+
+    //get search api
+    app.get("/searchText/:text", async (req, res) => {
+      const text = req.params.text;
+      const result = await toyCollection.find({ toyName: { $regex: text, $options: "i" } })
+        .toArray();
+      res.send(result);
+    });
+
+    //get my toys api
+    app.get('/myToys',async(req,res)=>{
+      const email=req.query.email
+      const result=await toyCollection.find({sellerEmail:email}).toArray()
+      res.send(result)
+    })
+
+    app.delete('/delete/:id',async(req,res)=>{
+      const id=req.params.id
+      const result=await toyCollection.deleteOne({_id:new ObjectId(id)})
+      res.send(result)
+    })
+
+    //update my toys get api
+    app.get('/updateData/:id',async(req,res)=>{
+      const id=req.params.id
+      const result=await toyCollection.find({_id:new ObjectId(id)}).toArray()
+      res.send(result)
+    })
+    
+
+    app.put('/updateData/:id',async(req,res)=>{
+      const data=req.body
+      const id=req.params.id
+      const updateInfo={
+        $set:{
+          toyName:data.toyName,
+          PictureURL:data.PictureURL,
+          sellerName:data.sellerName,
+          sellerEmail:data.sellerEmail,
+          SubCategory:data.SubCategory,
+          Price:data.Price,
+          Rating:data.Rating,
+          quantity:data.quantity,
+          description:data.description
+        }
+
+      }
+      const result=await toyCollection.updateOne({_id:new ObjectId(id)},updateInfo)
+      res.send(result)
+    })
 
 
 
