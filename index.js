@@ -97,6 +97,7 @@ async function run() {
 
     app.get('/allToyData',async(req,res)=>{
       const result=await toyCollection.find().toArray()
+      res.send(result)
     })
 
 
