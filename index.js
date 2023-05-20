@@ -11,6 +11,7 @@ require('dotenv').config()
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri =
   `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.yekoygf.mongodb.net/?retryWrites=true&w=majority`;
+// const uri =`mongodb://0.0.0.0:27017`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -24,7 +25,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const database = client.db('toyDb');
     const toyCollection = database.collection('toys');
@@ -78,13 +79,7 @@ async function run() {
       const id=req.params.id
       const updateInfo={
         $set:{
-          toyName:data.toyName,
-          PictureURL:data.PictureURL,
-          sellerName:data.sellerName,
-          sellerEmail:data.sellerEmail,
-          SubCategory:data.SubCategory,
           Price:data.Price,
-          Rating:data.Rating,
           quantity:data.quantity,
           description:data.description
         }
