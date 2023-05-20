@@ -39,8 +39,12 @@ async function run() {
     })
 
     // read all toy api
-    app.get('/allToys',async(req,res)=>{
-      const allToys=await toyCollection.find().sort({Price:-1}).skip(0).limit(20).toArray()
+    app.get('/allToys/:id',async(req,res)=>{
+      const id=req.params.id
+      const sortObj={
+        Price:id
+      }
+      const allToys=await toyCollection.find().sort(sortObj).limit(20).toArray()
       res.send(allToys)
     })
 
@@ -74,7 +78,7 @@ async function run() {
     
     // update by id api
 
-    app.put('/updateData/:id',async(req,res)=>{
+    app.put('/updateInfo/:id',async(req,res)=>{
       const data=req.body
       const id=req.params.id
       const updateInfo={
