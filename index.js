@@ -44,7 +44,7 @@ async function run() {
       const sortObj={
         Price:id
       }
-      const allToys=await toyCollection.find().sort(sortObj).limit(20).toArray()
+      const allToys=await toyCollection.find().sort(sortObj).skip(0).limit(20).toArray()
       res.send(allToys)
     })
 
